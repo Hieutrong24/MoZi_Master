@@ -1,0 +1,243 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+}
+.scroll-on-hover{
+    overflow:hidden;
+}
+.scroll-on-hover:hover{
+    overflow-y:auto;
+}
+.dropdown-hover-menu{
+    display: none;
+}
+.hover-on-hidden:hover .dropdown-hover-menu{
+    display: block;
+}
+
+:root {
+    --primary: #00ffd5;
+    --secondary: #7000ff;
+    --text: #ffffff;
+    --bg: #000000;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+.ui {
+    /* position: fixed; */
+    transform: none;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    z-index: 2;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.7;
+}
+
+    .ui:hover {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+@import url(https://fonts.googleapis.com/css?family=Bungee);
+
+.body {
+    height: 100vh;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    background: PapayaWhip;
+}
+.cookie-box {
+    display: flex;
+    animation: bounce 3s ease infinite;
+    margin-top: 200px;
+    z-index:1;
+}
+
+/* .cookie, .cookie2 .choc-chip-box {
+    # grid-column: 1;
+    # grid-row: 1;
+} */
+
+.cookie {
+    height: 150px;
+    width: 150px;
+    background-color: #D27D2D;
+    border-radius: 50% 45% 55% 45%;
+}
+
+.cookie2 {
+    height: 150px;
+    width: 150px;
+    margin-left: -150px;
+    background-color: #D27D2D;
+    border-radius: 45% 45% 45% 45%;
+    transform: rotate(40deg);
+}
+
+.choc-chip-box {
+    height: 150px;
+    width: 150px;
+    margin-right: -150px;
+    z-index: 1;
+}
+
+.choc-chip {
+    height: 25px;
+    width: 30px;
+}
+
+.regular {
+    background-color: #7B3F00;
+    border-radius: 35% 40%
+}
+
+.triangle {
+    background-color: #7B3F00;
+    border-radius: 50% 100% 45% 45%;
+}
+
+.bite {
+    height: 100px;
+    width: 100px;
+    margin-left: -100px;
+    background-color: PapayaWhip;
+    border-radius: 50%;
+    opacity: 0%;
+    z-index: 2;
+}
+
+#first {
+    transform: translate(170px, -40px)
+}
+
+#second {
+    transform: translate(85px, -30px)
+}
+
+#third {
+    transform: translate(130px, 0px)
+}
+
+#fourth {
+    transform: translate(80px, 40px)
+}
+
+#fifth {
+    transform: translate(130px, 75px)
+}
+
+#sixth {
+    transform: translate(170px, 40px)
+}
+
+.loading span {
+    display: inline-block;
+    font-family: Bungee;
+    color: #D27D2D;
+    animation: bounce 3s ease infinite;
+}
+
+    .loading span:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .loading span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .loading span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    .loading span:nth-child(4) {
+        animation-delay: 0.6s;
+    }
+
+    .loading span:nth-child(5) {
+        animation-delay: 0.8s;
+    }
+
+    .loading span:nth-child(6) {
+        animation-delay: 1s;
+    }
+
+    .loading span:nth-child(7) {
+        animation-delay: 1.2s;
+    }
+
+    .loading span:nth-child(8) {
+        animation-delay: 1.4s;
+    }
+
+    .loading span:nth-child(9) {
+        animation-delay: 1.6s;
+    }
+
+    .loading span:nth-child(10) {
+        animation-delay: 1.8s;
+    }
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translate(0, 0px);
+    }
+
+    50% {
+        transform: translate(0, 15px);
+    }
+
+    to {
+        transform: translate(0, -0px);
+    }
+}
+/* html, body {
+    height: 100vh;
+    overflow: hidden;
+} */
+.scroll-on-hover{
+    overflow:hidden;
+    transition: overflow 0.3s;
+}
+.scroll-on-hover:hover{
+    overflow-y:auto;
+}
+.nav-btn.active {
+    background-color: #d8d8d8; 
+    font-weight: bold;
+}
+@media (min-width: 992px) {
+  .custom-mt-responsive {
+    margin-top: 1rem !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .custom-mt-responsive {
+    margin-top: 5rem !important;  
+  }
+}
+.custom-mt{
+    margin-top: 14rem;
+}
+
+.item-center video {
+    align-items: center;
+}
