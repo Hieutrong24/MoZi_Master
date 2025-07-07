@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 import { faPhone, faVideo, faEllipsisV, faPaperPlane, faPen, faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
+import '../style.css'; // Import your CSS file for styling
 const MessageAllPage = () => {
   const { friendId } = useParams();
   const { authState } = useContext(AuthContext);
@@ -22,6 +23,8 @@ const MessageAllPage = () => {
   const currentUserId = authState?._id;
   const messageEndRef = useRef(null);
 
+  console.log('friends:', friends);
+  console.log('authState:', authState);
   useEffect(() => {
     fetchFriends();
     if (friendId) {
@@ -34,22 +37,29 @@ const MessageAllPage = () => {
     if (!socket || !authState?._id) return;
 
     const handleNewMessage = (newMsg) => {
-      const senderId = typeof newMsg.senderId === 'object' ? newMsg.senderId._id : newMsg.senderId;
-      const receiverId = typeof newMsg.receiverId === 'object' ? newMsg.receiverId._id : newMsg.receiverId;
+      console.log('Nhận tin nhắn mới từ socket:', newMsg);
+      // const senderId = typeof newMsg.senderId === 'object' ? newMsg.senderId._id : newMsg.senderId;
+      // const receiverId = typeof newMsg.receiverId === 'object' ? newMsg.receiverId._id : newMsg.receiverId;
 
-      const isCurrentChat =
-        (senderId === friendId && receiverId === currentUserId) ||
-        (senderId === currentUserId && receiverId === friendId);
+      // const isCurrentChat =
+      //   (receiverId === currentUserId) ||
+      //   (receiverId === friendId);
 
-      if (isCurrentChat) {
-        setMessages((prev) => [...prev, newMsg]);
-      }
+      // if (isCurrentChat) {
+
+      // }
+
+      setMessages((prev) => [...prev, newMsg]);
     };
+    socket.on("getOnlineUsers", (onlineUserIds) => {
+      console.log("Danh sách user online:", onlineUserIds);
 
+    });
     socket.on("newMessage", handleNewMessage);
 
     return () => {
       socket.off("newMessage", handleNewMessage);
+      socket.off("getOnlineUsers");
     };
   }, [socket, friendId, authState?._id]);
 
@@ -69,24 +79,7 @@ const MessageAllPage = () => {
       const res = await axios.get(`${address}/api/friends/list`, { withCredentials: true });
       const friendsData = res.data.data || [];
 
-      const updatedFriends = await Promise.all(
-        friendsData.map(async (friend) => {
-          try {
-            const messageRes = await axios.get(`${address}/api/message/latest/${friend._id}`, { withCredentials: true });
-            return {
-              ...friend,
-              latestMessage: {
-                text: messageRes.data?.data?.message || "Chưa có tin nhắn",
-                time: messageRes.data?.data?.createdAt || null
-              }
-            };
-          } catch {
-            return { ...friend, latestMessage: "Chưa có tin nhắn" };
-          }
-        })
-      );
-
-      setFriends(updatedFriends);
+      setFriends(friendsData.filter(fr => fr._id !== currentUserId));
     } catch (err) {
       console.error("Lỗi khi tải danh sách bạn bè:", err);
     }
@@ -111,42 +104,42 @@ const MessageAllPage = () => {
   };
 
   const handleSendMessage = async () => {
-  if (!newMessage.trim() || !friendId) return;
+    if (!newMessage.trim() || !friendId) return;
 
-  try {
-    const res = await axios.post(`${address}/api/message/send/${friendId}`, {
-      message: newMessage,
-    }, {
-      withCredentials: true,
-    });
+    try {
+      const res = await axios.post(`${address}/api/message/send/${friendId}`, {
+        message: newMessage,
+      }, {
+        withCredentials: true,
+      });
 
-    
-    const newSentMessage = {
-      _id: res.data.messageId,  
-      message: newMessage,
-      senderId: {
-        _id: currentUserId,
-        name: authState?.full_name || authState?.username || "Tôi",
-        avatar: authState?.profile_picture || "/default-avatar.png"
-      },
-      receiverId: friendId,
-      createdAt: new Date().toISOString(),
-    };
 
-    setMessages((prev) => [...prev, newSentMessage]); 
+      const newSentMessage = {
+        _id: res.data.messageId,
+        message: newMessage,
+        senderId: {
+          _id: currentUserId,
+          name: authState?.full_name || authState?.username || "Tôi",
+          avatar: authState?.profile_picture || "/default-avatar.png"
+        },
+        receiverId: friendId,
+        createdAt: new Date().toISOString(),
+      };
 
-    setNewMessage("");
+      setMessages((prev) => [...prev, newSentMessage]);
 
-    
-  } catch (err) {
-    console.error("Lỗi khi gửi tin nhắn:", err.response?.data || err.message);
-  }
-};
+      setNewMessage("");
+
+
+    } catch (err) {
+      console.error("Lỗi khi gửi tin nhắn:", err.response?.data || err.message);
+    }
+  };
 
 
   const isOnline = (userId) => onlineUsers.includes(userId);
   return (
-    <div className="d-flex container mt-3" style={{ height: '80vh', background: '#f7f7f9' }}>
+    <div className="d-flex container mt-3 md:flex-col main" style={{ height: '80vh', background: '#f7f7f9' }}>
       {/* Nút mở offcanvas - chỉ hiện trên màn nhỏ */}
       <div className="d-block d-md-none p-2 bg-white border-bottom">
         <button
@@ -197,7 +190,7 @@ const MessageAllPage = () => {
                 />
                 <div>
                   <div className="fw-bold">{friend.name}</div>
-                  
+
                   <div className="text-muted" style={{ fontSize: "0.9em" }}>
                     {friend.latestMessage?.text || "Chưa có tin nhắn"}
                     <br />
@@ -221,7 +214,7 @@ const MessageAllPage = () => {
 
       {/* Sidebar chính - hiện trên màn hình lớn */}
       <div className="col-3 border-end bg-white p-3 scroll-on-hover d-none d-md-block" style={{ height: '80vh' }}>
-        <h5 className="fw-bold">Active chats <span className="badge bg-success ms-1">{friends.length}</span></h5>
+        <h5 className="fw-bold">Danh sách bạn bè <span className="badge bg-success ms-1">{friends.length}</span></h5>
         <div className="input-group mb-3">
           <input type="text" className="form-control rounded-5" placeholder="Search for chats" />
           <Button className="input-group-text bg-dark border-0">
@@ -274,7 +267,7 @@ const MessageAllPage = () => {
 
 
       {/* Main chat */}
-      <div className="col-9 d-flex flex-column" style={{ height: '80vh' }}>
+      <div className="col-9 d-flex flex-column main-chat" style={{ height: '80vh' }}>
         {/* Header */}
         <div className="d-flex align-items-center justify-content-between bg-white p-3 border-bottom">
           <div className="d-flex align-items-center">
@@ -308,14 +301,14 @@ const MessageAllPage = () => {
           ) : (
             messages.map((msg, index) => {
               const isMe = msg.senderId?._id === currentUserId || msg.senderId === currentUserId;
-              const isSenderObject = typeof msg.senderId === "object";
-              const avatarUrl = isMe ? currentUserAvatar : isSenderObject ? msg.senderId.avatar : "";
-              const nameDisplay = isMe ? currentUserName : isSenderObject ? msg.senderId.name : "Người dùng";
+              const isSenderObject = true;
+              const avatarUrl = isMe ? currentUserAvatar : isSenderObject ? currentFriend?.avatar : "";
+              const nameDisplay = isMe ? currentUserName : isSenderObject ? currentFriend?.name : "Người dùng";
               const time = msg.createdAt
                 ? new Date(msg.createdAt).toLocaleTimeString("vi-VN", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
                 : "";
 
               return (
@@ -361,8 +354,6 @@ const MessageAllPage = () => {
             onChange={(e) => setNewMessage(e.target.value)}
             disabled={!currentFriend}
           />
-          <button className="btn btn-outline-danger me-1"><FontAwesomeIcon icon={faTimes} /></button>
-          <button className="btn btn-outline-warning me-1"><FontAwesomeIcon icon={faPen} /></button>
           <button
             className="btn btn-primary"
             onClick={handleSendMessage}

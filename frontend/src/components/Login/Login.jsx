@@ -22,6 +22,8 @@ const Login = ({ setStage }) => {
       return toast.error(res?.msg || "Đăng nhập thất bại");
     }
 
+    console.log('Login successful:', res);
+
     toast.success("Đăng nhập thành công!");
     localStorage.setItem("login_status", JSON.stringify(1));
     const user = res.data;
@@ -53,7 +55,7 @@ const Login = ({ setStage }) => {
           </a>
           <hr className="bg-dark" />
 
-           
+
           <form onSubmit={handleLogin}>
             <div className="mb-3">
               <label className="form-label">Email</label>
@@ -116,13 +118,13 @@ const Login = ({ setStage }) => {
 
           <div className="mt-3">
             <h6 className="text-center">
-              Not a member yet?{" "}
+              Bạn chưa có tài khoản?{" "}
               <button
                 type="button"
                 className="btn btn-link p-0"
                 onClick={() => setStage("register")}
               >
-                Sign Up
+                Đăng ký
               </button>
             </h6>
           </div>

@@ -15,6 +15,9 @@ const Home = () => {
   const { authState } = useContext(AuthContext);
   const { avatar, _id: currentUserId } = authState || {};
 
+  console.log('Current User:', authState);
+  console.log('Avatar URL:', avatar);
+
   const [content, setContent] = useState('');
   const [posts, setPosts] = useState([]);
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -150,14 +153,18 @@ const Home = () => {
 
           <div className="col-lg-5 col-12 border border-2 rounded-3 mx-auto bg-body-secondary scroll-on-hover" style={{ maxHeight: '85vh' }}>
             {/* Story */}
-            <StorySection/>
+            <StorySection />
 
 
             {/* Create Post */}
             <div className="bg-white border border-2 rounded-2 p-3 mt-2">
               <div className="row align-items-center">
                 <div className="col-2">
-                  <img src={avatar} className="img-fluid rounded-circle" alt="User Avatar" />
+                  <img
+                    src={avatar}
+                    className="img-fluid rounded-circle"
+                    alt="User Avatar"
+                  />
                 </div>
                 <div className="col-10">
                   <input type="text" className="form-control border-0 bg-light" placeholder="Share your thoughts..." value={content} onChange={(e) => setContent(e.target.value)} />
@@ -169,11 +176,11 @@ const Home = () => {
                   {file?.type.startsWith('image/') ? (
                     <img src={selectedMediaPreview} alt="Preview" className="img-fluid rounded" />
                   ) : (
-                     <div className="ratio ratio-16x9">
-                        <video controls className="w-100 rounded">
-                          <source src={selectedMediaPreview} type={file?.type} />
-                          Trình duyệt không hỗ trợ video.
-                        </video>
+                    <div className="ratio ratio-16x9">
+                      <video controls className="w-100 rounded">
+                        <source src={selectedMediaPreview} type={file?.type} />
+                        Trình duyệt không hỗ trợ video.
+                      </video>
                     </div>
                   )}
                 </div>

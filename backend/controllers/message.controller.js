@@ -53,8 +53,7 @@ const getMessages = async (req, res) => {
       ]
     })
       .sort({ createdAt: 1 }) // Sắp xếp theo thời gian tăng dần
-      .populate("senderId", "name avatar")
-      .populate("receiverId", "name avatar");
+
 
     res.status(200).json({ messages });
   } catch (err) {
@@ -73,9 +72,9 @@ const getLatestMessage = async (req, res) => {
         { senderId: receiverId, receiverId: senderId }
       ]
     })
-    .sort({ createdAt: -1 }) // ✅ mới nhất trước
-    .populate("senderId", "name avatar")
-    .populate("receiverId", "name avatar");
+      .sort({ createdAt: -1 }) // ✅ mới nhất trước
+      .populate("senderId", "name avatar")
+      .populate("receiverId", "name avatar");
 
     if (!latestMessage) {
       return res.status(200).json({ data: null, success: true });

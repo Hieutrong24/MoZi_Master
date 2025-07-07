@@ -134,7 +134,9 @@ const MainNavbar = () => {
                   <NavDropdown.Item onClick={() => navigate('/viewprofile')}>View Profile</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => navigate('/settings')}>Settings</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <LogoutButton />
+                  <div className="flex justify-center text-center w-full">
+                    <LogoutButton />
+                  </div>
                 </NavDropdown>
               </Nav>
 

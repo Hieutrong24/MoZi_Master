@@ -7,11 +7,11 @@ import generateToken from "../utils/generate-token.js";
 const signIn = async (req, res) => {
   const { email, password } = req.body;
 
- 
+
   console.log("\n--- Bắt đầu quy trình đăng nhập ---");
   console.log("Email nhận được từ frontend:", email);
   console.log("Mật khẩu nhận được từ frontend (plaintext):", password); // CẨN THẬN: KHÔNG NÊN LOG MẬT KHẨU PLAINTEXT TRONG MÔI TRƯỜNG PRODUCTION!
- 
+
 
   if (!email || !password) {
     console.log("Lỗi: Thiếu email hoặc mật khẩu.");
@@ -30,11 +30,11 @@ const signIn = async (req, res) => {
         .json({ msg: "Invalid credentials", success: false });
     }
 
- 
+
     console.log("Người dùng được tìm thấy trong DB:");
     console.log("  Email:", user.email);
     console.log("  Mật khẩu đã lưu trong DB (hashed):", user.password);
- 
+
 
     const isMatch = await bcryptjs.compare(password, user.password);
 
@@ -57,6 +57,7 @@ const signIn = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        avatar: user.avatar,
       },
     });
   } catch (error) {
@@ -65,7 +66,7 @@ const signIn = async (req, res) => {
   }
 };
 
- 
+
 const signUp = async (req, res) => {
   const { name, email, password, gender } = req.body;
 
