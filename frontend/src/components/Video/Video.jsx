@@ -10,7 +10,7 @@ const VideoPage = () => {
 
   const fetchVideoPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/posts/feed", {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/posts/feed`, {
         withCredentials: true,
       });
 
@@ -147,10 +147,10 @@ const VideoPage = () => {
                       <small className="text-muted">{new Date(post.createdAt).toLocaleString()}</small>
                     </div>
                   </div>
-                   <div className="ratio ratio-16x9">
+                  <div className="ratio ratio-16x9">
                     <p>{post.content}</p>
                     <video controls className="w-60 rounded mx-auto d-block">
-                      <source src={`http://localhost:3000${post.video}`} type="video/mp4" />
+                      <source src={`${import.meta.env.VITE_BACKEND_URL}${post.video}`} type="video/mp4" />
                       Trình duyệt không hỗ trợ video.
                     </video>
                   </div>

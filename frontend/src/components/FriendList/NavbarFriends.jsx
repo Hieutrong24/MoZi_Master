@@ -6,12 +6,11 @@ import { Link } from "react-router-dom";
 const NavbarFriends = () => {
   const { authState } = useContext(AuthContext);
   const [friends, setFriends] = useState([]);
-  const address = "http://localhost:3000";
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const res = await axios.get(`${address}/api/friends/list`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/friends/list`, {
           withCredentials: true,
         });
         setFriends(res.data.data || []);

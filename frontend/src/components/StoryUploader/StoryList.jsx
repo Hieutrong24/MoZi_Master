@@ -1,7 +1,6 @@
 import React from "react";
 
 const StoryList = ({ stories, onStoryClick }) => {
-  const address = "http://localhost:3000";
 
   return (
     <>
@@ -12,7 +11,7 @@ const StoryList = ({ stories, onStoryClick }) => {
           style={{
             width: "110px",
             height: "190px",
-            backgroundImage: `url(${address}${story.mediaUrl})`,
+            backgroundImage: `url(${import.meta.env.VITE_BACKEND_URL}${story.mediaUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             flex: "0 0 auto",

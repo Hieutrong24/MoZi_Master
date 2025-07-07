@@ -12,7 +12,7 @@ const StorySection = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/story/all", { withCredentials: true })
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/story/all`, { withCredentials: true })
       .then((res) => setStories(res.data.stories || []))
       .catch((err) => console.error("Lỗi lấy story:", err));
   }, [reload]);
@@ -59,7 +59,7 @@ const StorySection = () => {
           style={{
             width: "110px",
             height: "190px",
-            backgroundImage: `url(http://localhost:3000${story.mediaUrl})`,
+            backgroundImage: `url(${import.meta.env.VITE_BACKEND_URL}/api/story/all${story.mediaUrl})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             flex: "0 0 auto",
@@ -128,14 +128,14 @@ const StorySection = () => {
               <div className="modal-body text-center">
                 {selectedStory.mediaType === "image" ? (
                   <img
-                    src={`http://localhost:3000${selectedStory.mediaUrl}`}
+                    src={`${import.meta.env.VITE_BACKEND_URL}${selectedStory.mediaUrl}`}
                     className="img-fluid rounded"
                     alt="story"
                     style={{ maxHeight: "70vh" }}
                   />
                 ) : (
                   <video controls autoPlay className="w-100 rounded" style={{ maxHeight: "70vh" }}>
-                    <source src={`http://localhost:3000${selectedStory.mediaUrl}`} type="video/mp4" />
+                    <source src={`${import.meta.env.VITE_BACKEND_URL}${selectedStory.mediaUrl}`} type="video/mp4" />
                     Trình duyệt không hỗ trợ video.
                   </video>
                 )}

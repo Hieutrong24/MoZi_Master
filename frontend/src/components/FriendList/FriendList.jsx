@@ -16,12 +16,11 @@ const FriendList = () => {
   const [socket, setSocket] = useState(null);
   const { authState } = useContext(AuthContext);
   const navigate = useNavigate();
-  const address = "http://localhost:3000";
 
   // Khởi tạo socket khi có authState._id
   useEffect(() => {
     if (authState?._id) {
-      const newSocket = io(address, {
+      const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
         query: { userId: authState._id },
       });
       setSocket(newSocket);
@@ -44,7 +43,7 @@ const FriendList = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`${address}/api/user/all`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/all`, {
         withCredentials: true,
       });
       if (Array.isArray(res.data.users)) {
@@ -60,7 +59,7 @@ const FriendList = () => {
 
   const fetchFriends = async () => {
     try {
-      const res = await axios.get(`${address}/api/friends/list`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/friends/list`, {
         withCredentials: true,
       });
       setFriends(res.data.data || []);
@@ -75,7 +74,7 @@ const FriendList = () => {
 
   return (
     <div className="col-lg-3 d-none d-lg-block p-0">
-      <div className="scroll-on-hover vh-100 overflow-hidden"style={{height:'60vh'}}>
+      <div className="scroll-on-hover vh-100 overflow-hidden" style={{ height: '60vh' }}>
         <div className="border border-2 rounded-3 shadow p-3 bg-white">
           <h5 className="text-center">Danh sách người dùng</h5>
           <ul className="navbar-nav flex-column p-3">
@@ -100,11 +99,10 @@ const FriendList = () => {
                         </small>
                         <br />
                         <small
-                          className={`badge mt-1 ${
-                            onlineUsers.includes(user._id)
-                              ? "bg-success"
-                              : "bg-secondary"
-                          }`}
+                          className={`badge mt-1 ${onlineUsers.includes(user._id)
+                            ? "bg-success"
+                            : "bg-secondary"
+                            }`}
                         >
                           {onlineUsers.includes(user._id) ? "Online" : "Offline"}
                         </small>

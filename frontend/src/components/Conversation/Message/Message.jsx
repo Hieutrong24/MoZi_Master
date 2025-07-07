@@ -15,20 +15,19 @@ const Message = ({ show, onClose }) => {
   const [socket, setSocket] = useState(null);
 
   const navigate = useNavigate();
-  const address = "http://localhost:3000";
 
-  const { authState } = useContext(AuthContext);   
+  const { authState } = useContext(AuthContext);
   const userId = authState?._id;
 
- 
+
   useEffect(() => {
     if (!userId) return;
 
-    const newSocket = io(address, {
+    const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
       query: { userId },
     });
 
- 
+
     newSocket.on("getOnlineUsers", (onlineUserIds) => {
       console.log("Danh sách user online:", onlineUserIds);
       setOnlineUsers(onlineUserIds);
@@ -39,7 +38,7 @@ const Message = ({ show, onClose }) => {
     return () => newSocket.disconnect();
   }, [userId]);
 
- 
+
   useEffect(() => {
     if (show) {
       fetchFriends();
@@ -116,9 +115,8 @@ const Message = ({ show, onClose }) => {
                     </div>
                   </div>
                   <small
-                    className={`badge ${
-                      onlineUsers.includes(friend._id) ? "bg-success" : "bg-secondary"
-                    }`}
+                    className={`badge ${onlineUsers.includes(friend._id) ? "bg-success" : "bg-secondary"
+                      }`}
                   >
                     {onlineUsers.includes(friend._id) ? "Online" : "Offline"}
                   </small>

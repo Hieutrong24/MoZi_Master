@@ -12,7 +12,6 @@ const MessageAllPage = () => {
   const { authState } = useContext(AuthContext);
   const { socket, onlineUsers } = useSocketContext();
   const navigate = useNavigate();
-  const address = "http://localhost:3000";
 
   const [friends, setFriends] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(null);
@@ -76,7 +75,7 @@ const MessageAllPage = () => {
 
   const fetchFriends = async () => {
     try {
-      const res = await axios.get(`${address}/api/friends/list`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/friends/list`, { withCredentials: true });
       const friendsData = res.data.data || [];
 
       setFriends(friendsData.filter(fr => fr._id !== currentUserId));
@@ -87,7 +86,7 @@ const MessageAllPage = () => {
 
   const fetchFriendDetail = async (id) => {
     try {
-      const res = await axios.get(`${address}/api/user/${id}`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/${id}`, { withCredentials: true });
       setCurrentFriend(res.data.user || null);
     } catch (err) {
       console.error("Không tìm thấy người dùng:", err);
@@ -96,7 +95,7 @@ const MessageAllPage = () => {
 
   const fetchMessages = async (id) => {
     try {
-      const res = await axios.get(`${address}/api/message/${id}`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/message/${id}`, { withCredentials: true });
       setMessages(res.data.messages || []);
     } catch (err) {
       console.error("Không thể lấy tin nhắn:", err.response?.data || err.message);
@@ -107,7 +106,7 @@ const MessageAllPage = () => {
     if (!newMessage.trim() || !friendId) return;
 
     try {
-      const res = await axios.post(`${address}/api/message/send/${friendId}`, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/message/send/${friendId}`, {
         message: newMessage,
       }, {
         withCredentials: true,

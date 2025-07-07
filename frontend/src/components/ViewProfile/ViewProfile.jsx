@@ -5,7 +5,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const ViewProfilePage = () => {
-  const address = "http://localhost:3000";
+  const address = import.meta.env.VITE_BACKEND_URL
   const { authState } = useContext(AuthContext);
   const { name, avatar, _id } = authState || {};
   const [friendCount, setFriendCount] = useState(0);
@@ -155,10 +155,10 @@ const ViewProfilePage = () => {
                   )}
                   {post.video && (
                     <div className="ratio ratio-16x9">
-                         <video controls className="w-100 rounded mb-3">
-                            <source src={`${address}${post.video}`} type="video/mp4" />
-                            Trình duyệt không hỗ trợ video.
-                        </video>
+                      <video controls className="w-100 rounded mb-3">
+                        <source src={`${address}${post.video}`} type="video/mp4" />
+                        Trình duyệt không hỗ trợ video.
+                      </video>
                     </div>
                   )}
                   <div className="d-flex justify-content-between text-muted">
@@ -173,90 +173,90 @@ const ViewProfilePage = () => {
 
         {/* Sidebar - Friend & Photo info */}
         <div className="mt-3 col-lg-4 d-none d-lg-inline bg-body-secondary scroll-on-hover" style={{ height: '580px' }}>
-          <div className="mt-3 col-lg-4 d-none d-lg-inline bg-body-secondary scroll-on-hover" style={{height:'580px'}}>
-                   <div className="bg-white p-4 rounded-lg shadow mb-4">
-                        <h5 className="mb-3" style={{ fontWeight: 'bold' }}>About</h5> 
-                        <p className="text-muted mb-4">  
-                            He moonlights difficult engrossed it, sportsmen. Interested has all Devonshire
-                            difficulty gay assistance joy.
-                        </p>
+          <div className="mt-3 col-lg-4 d-none d-lg-inline bg-body-secondary scroll-on-hover" style={{ height: '580px' }}>
+            <div className="bg-white p-4 rounded-lg shadow mb-4">
+              <h5 className="mb-3" style={{ fontWeight: 'bold' }}>About</h5>
+              <p className="text-muted mb-4">
+                He moonlights difficult engrossed it, sportsmen. Interested has all Devonshire
+                difficulty gay assistance joy.
+              </p>
 
-                        <div className="d-flex align-items-center mb-2">
-                            <i className="fa-solid fa-calendar-days me-3" style={{ color: '#6c757d' }}></i> {/* Icon lịch */}
-                             
-                            <span className="text-dark">Born: <span style={{ fontWeight: 'bold' }}>October 20, 1990</span></span>
-                        </div>
+              <div className="d-flex align-items-center mb-2">
+                <i className="fa-solid fa-calendar-days me-3" style={{ color: '#6c757d' }}></i> {/* Icon lịch */}
 
-                        <div className="d-flex align-items-center mb-2">
-                            <i className="fa-solid fa-heart me-3" style={{ color: '#6c757d' }}></i> {/* Icon trái tim */}
-                            
-                            <span className="text-dark">Status: <span style={{ fontWeight: 'bold' }}>Single</span></span>
-                        </div>
+                <span className="text-dark">Born: <span style={{ fontWeight: 'bold' }}>October 20, 1990</span></span>
+              </div>
 
-                        <div className="d-flex align-items-center mb-0"> {/* mb-0 để không có margin dưới cùng */}
-                            <i className="fa-solid fa-envelope me-3" style={{ color: '#6c757d' }}></i> {/* Icon email */}
-                             
-                            <span className="text-dark">Email: <span style={{ fontWeight: 'bold' }}>example@gmail.com</span></span>
-                        </div>
-                    </div>
-                    
+              <div className="d-flex align-items-center mb-2">
+                <i className="fa-solid fa-heart me-3" style={{ color: '#6c757d' }}></i> {/* Icon trái tim */}
 
-                    <div className="bg-white mt-3 rounded-3">
-                        <div className="row p-3">
-                            <h5 className="col">Photos</h5> <Button variant="outline-info" className=" col-4 bg-light-info ms-auto">See all photo</Button>
-                        </div>
+                <span className="text-dark">Status: <span style={{ fontWeight: 'bold' }}>Single</span></span>
+              </div>
 
-                        <div className="row row-cols-2 justify-content-center">
-                            <div className="col-5"><img src="./Images/Post/01.jpg" className="img img-fluid rounded-3 "/></div>
-                            <div className="col-5"><img src="./Images/Post/02.jpg" className="img img-fluid rounded-3 "/></div>
-                        </div>
-                        <div className="row row-cols-3 justify-content-center p-3">
-                            <div className="col-4"><img src="./Images/Post/03.jpg" className="img img-fluid rounded-3 "/></div>
-                            <div className="col-4"><img src="./Images/Post/04.jpg" className="img img-fluid rounded-3 "/></div>
-                            <div className="col-4"><img src="./Images/Post/05.jpg" className="img img-fluid rounded-3 "/></div>
-                        </div>
-                    </div>
+              <div className="d-flex align-items-center mb-0"> {/* mb-0 để không có margin dưới cùng */}
+                <i className="fa-solid fa-envelope me-3" style={{ color: '#6c757d' }}></i> {/* Icon email */}
 
-                    <div className="bg-white mt-3 rounded-3">
-                        <div className="d-flex p-3">
-                            <h4 className="">Friends</h4> <span className="ms-1 p-1 bg-danger bg-opacity-25">{friendCount}</span><Button variant="outline-info" className="ms-auto bg-light-info">See all friends</Button>
-                        </div>
-                        <div className="row row-cols-2 p-4">
-                            {friends.length > 0 ? (
-                                friends.map((friend, index) => (
-                                     <Link to={`/profile/${friend._id}`} key={friend._id} className="col-5 mb-4 rounded-3 p-3 border border-2 text-center ms-3">
-                                        {/* <div key={friend._id || index} className="col-5 mb-4 rounded-3 p-3 border border-2 text-center ms-3"> */}
-                                            <img
-                                            className="img img-fluid rounded-circle mb-2"
-                                            src={friend.avatar || "./Images/Avarta/th (1).jpg"}
-                                            alt="avatar"
-                                            style={{ height: "70px", width: "70px", objectFit: "cover" }}
-                                            />
-                                            <h5>{friend.name}</h5>
-                                            <p style={{ fontSize: "12px" }}>{friend.mutualCount || 0} mutual connections</p>
-                                            <div>
-                                            <Button variant="info" className="p-1 text-white p-2" title="Message">
-                                                <i className="fa-solid fa-comment-dots"></i>
-                                            </Button>
-                                            <Button
-                                                variant="danger"
-                                                className="p-1 text-white ms-2 p-2"
-                                                title="Remove friend"
-                                                onClick={() => handleRemoveFriend(friend._id)}
-                                            >
-                                                <i className="fa-solid fa-user-slash"></i>
-                                            </Button>
-                                            </div>
-                                        {/* </div> */}
-                                     </Link>
-                                ))
-                            ) : (
-                                <div className="col-12 text-muted text-center">Bạn chưa có bạn bè nào.</div>
-                            )}
-                            </div>
-
-                    </div>
+                <span className="text-dark">Email: <span style={{ fontWeight: 'bold' }}>example@gmail.com</span></span>
+              </div>
             </div>
+
+
+            <div className="bg-white mt-3 rounded-3">
+              <div className="row p-3">
+                <h5 className="col">Photos</h5> <Button variant="outline-info" className=" col-4 bg-light-info ms-auto">See all photo</Button>
+              </div>
+
+              <div className="row row-cols-2 justify-content-center">
+                <div className="col-5"><img src="./Images/Post/01.jpg" className="img img-fluid rounded-3 " /></div>
+                <div className="col-5"><img src="./Images/Post/02.jpg" className="img img-fluid rounded-3 " /></div>
+              </div>
+              <div className="row row-cols-3 justify-content-center p-3">
+                <div className="col-4"><img src="./Images/Post/03.jpg" className="img img-fluid rounded-3 " /></div>
+                <div className="col-4"><img src="./Images/Post/04.jpg" className="img img-fluid rounded-3 " /></div>
+                <div className="col-4"><img src="./Images/Post/05.jpg" className="img img-fluid rounded-3 " /></div>
+              </div>
+            </div>
+
+            <div className="bg-white mt-3 rounded-3">
+              <div className="d-flex p-3">
+                <h4 className="">Friends</h4> <span className="ms-1 p-1 bg-danger bg-opacity-25">{friendCount}</span><Button variant="outline-info" className="ms-auto bg-light-info">See all friends</Button>
+              </div>
+              <div className="row row-cols-2 p-4">
+                {friends.length > 0 ? (
+                  friends.map((friend, index) => (
+                    <Link to={`/profile/${friend._id}`} key={friend._id} className="col-5 mb-4 rounded-3 p-3 border border-2 text-center ms-3">
+                      {/* <div key={friend._id || index} className="col-5 mb-4 rounded-3 p-3 border border-2 text-center ms-3"> */}
+                      <img
+                        className="img img-fluid rounded-circle mb-2"
+                        src={friend.avatar || "./Images/Avarta/th (1).jpg"}
+                        alt="avatar"
+                        style={{ height: "70px", width: "70px", objectFit: "cover" }}
+                      />
+                      <h5>{friend.name}</h5>
+                      <p style={{ fontSize: "12px" }}>{friend.mutualCount || 0} mutual connections</p>
+                      <div>
+                        <Button variant="info" className="p-1 text-white p-2" title="Message">
+                          <i className="fa-solid fa-comment-dots"></i>
+                        </Button>
+                        <Button
+                          variant="danger"
+                          className="p-1 text-white ms-2 p-2"
+                          title="Remove friend"
+                          onClick={() => handleRemoveFriend(friend._id)}
+                        >
+                          <i className="fa-solid fa-user-slash"></i>
+                        </Button>
+                      </div>
+                      {/* </div> */}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="col-12 text-muted text-center">Bạn chưa có bạn bè nào.</div>
+                )}
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>

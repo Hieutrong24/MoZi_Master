@@ -6,7 +6,6 @@ import { Button } from "react-bootstrap";
 
 const UserProfilePage = () => {
   const { userId } = useParams();
-  const address = "http://localhost:3000";
   const { authState } = useContext(AuthContext);
   const currentUserId = authState?._id;
 
@@ -21,7 +20,7 @@ const UserProfilePage = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${address}/api/user/${userId}`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/${userId}`, {
           withCredentials: true,
         });
         setUser(res.data.user);
@@ -32,7 +31,7 @@ const UserProfilePage = () => {
 
     const fetchUserPosts = async () => {
       try {
-        const res = await axios.get(`${address}/api/posts/user/${userId}`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/posts/user/${userId}`, {
           withCredentials: true,
         });
         setUserPosts(res.data.posts || []);
@@ -43,7 +42,7 @@ const UserProfilePage = () => {
 
     const fetchFriends = async () => {
       try {
-        const res = await axios.get(`${address}/api/friends/list/${userId}`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/friends/list/${userId}`, {
           withCredentials: true,
         });
         setFriends(res.data.data || []);
@@ -58,7 +57,7 @@ const UserProfilePage = () => {
 
     const checkFriendRequest = async () => {
       try {
-        const res = await axios.get(`${address}/api/friends/request-status/${userId}`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/friends/request-status/${userId}`, {
           withCredentials: true,
         });
         setIsRequested(res.data.requested);
@@ -75,7 +74,7 @@ const UserProfilePage = () => {
 
   const handleSendFriendRequest = async () => {
     try {
-      await axios.post(`${address}/api/friends/request`, { receiverId: userId }, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/friends/request`, { receiverId: userId }, {
         withCredentials: true,
       });
       setIsRequested(true);
@@ -171,7 +170,7 @@ const UserProfilePage = () => {
                   {post.image && (
                     <div className="text-center">
                       <img
-                        src={`${address}${post.image}`}
+                        src={`${import.meta.env.VITE_BACKEND_URL}${post.image}`}
                         className="img-fluid rounded mb-3"
                         alt="Post"
                       />
@@ -183,7 +182,7 @@ const UserProfilePage = () => {
                     <div className="mb-3">
                       <div className="ratio ratio-16x9">
                         <video controls>
-                          <source src={`${address}${post.video}`} type="video/mp4" />
+                          <source src={`${import.meta.env.VITE_BACKEND_URL}${post.video}`} type="video/mp4" />
                           Trình duyệt của bạn không hỗ trợ video.
                         </video>
                       </div>

@@ -9,7 +9,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import StorySection from '../StoryUploader/StorySectionPage';
 
-const address = 'http://localhost:3000';
 
 const Home = () => {
   const { authState } = useContext(AuthContext);
@@ -38,7 +37,7 @@ const Home = () => {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get(`${address}/api/posts/feed`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/posts/feed`, { withCredentials: true });
       const postsWithDefaults = res.data.posts.map(post => ({
         ...post,
         likes: Array.isArray(post.likes) ? post.likes : [],
@@ -64,7 +63,7 @@ const Home = () => {
         else if (file.type.startsWith('video/')) formData.append('video', file);
       }
 
-      await axios.post(`${address}/api/posts`, formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/posts`, formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -91,7 +90,7 @@ const Home = () => {
     if (!window.confirm('Bạn có chắc muốn xóa bài viết này?')) return;
 
     try {
-      await axios.delete(`${address}/api/posts/${postId}`, { withCredentials: true });
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/posts/${postId}`, { withCredentials: true });
       toast.success('Đã xóa bài viết');
       fetchPosts();
     } catch (err) {
@@ -106,7 +105,7 @@ const Home = () => {
     }
 
     try {
-      await axios.put(`${address}/api/posts/${editPostId}`, { content: editContent }, {
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/posts/${editPostId}`, { content: editContent }, {
         withCredentials: true
       });
       toast.success('Đã cập nhật bài viết!');
@@ -120,7 +119,7 @@ const Home = () => {
 
   const handleLike = async (postId) => {
     try {
-      await axios.put(`${address}/api/posts/${postId}/like`, {}, { withCredentials: true });
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/posts/${postId}/like`, {}, { withCredentials: true });
       fetchPosts();
     } catch (err) {
       toast.error('Không thể like bài viết');
@@ -136,7 +135,7 @@ const Home = () => {
     const text = commentText[activePostId];
     if (!text?.trim()) return;
     try {
-      await axios.post(`${address}/api/posts/${activePostId}/comment`, { text }, { withCredentials: true });
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/posts/${activePostId}/comment`, { text }, { withCredentials: true });
       setCommentText(prev => ({ ...prev, [activePostId]: '' }));
       fetchPosts();
       setShowCommentModal(false);
@@ -232,10 +231,10 @@ const Home = () => {
                     ) : (
                       <>
                         <p>{post.content}</p>
-                        {post.image && <img src={`http://localhost:3000${post.image}`} className="img-fluid rounded-2" alt="Post" />}
+                        {post.image && <img src={`${import.meta.env.VITE_BACKEND_URL}${post.image}`} className="img-fluid rounded-2" alt="Post" />}
                         {post.video && (
                           <video controls className="w-100 rounded">
-                            <source src={`http://localhost:3000${post.video}`} type="video/mp4" />
+                            <source src={`${import.meta.env.VITE_BACKEND_URL}${post.video}`} type="video/mp4" />
                             Trình duyệt không hỗ trợ video.
                           </video>
                         )}

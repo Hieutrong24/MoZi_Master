@@ -11,7 +11,6 @@ const Friends = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [receivedRequests, setReceivedRequests] = useState([]);
 
-  const address = "http://localhost:3000";
 
   useEffect(() => {
     fetchCurrentUser();
@@ -22,21 +21,21 @@ const Friends = () => {
   }, []);
 
   const fetchReceivedRequests = async () => {
-  try {
-    const res = await axios.get(address + "/api/friends/requests", {
-      withCredentials: true,
-    });
-    setReceivedRequests(res.data.data || []);
-  } catch (err) {
-    console.error("Lỗi khi tải lời mời đã nhận:", err);
-  }
-};
+    try {
+      const res = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/friends/requests", {
+        withCredentials: true,
+      });
+      setReceivedRequests(res.data.data || []);
+    } catch (err) {
+      console.error("Lỗi khi tải lời mời đã nhận:", err);
+    }
+  };
 
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get(address + "/api/user/me", { withCredentials: true });
-      setCurrentUserId(res.data._id);  
+      const res = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/user/me", { withCredentials: true });
+      setCurrentUserId(res.data._id);
     } catch (err) {
       console.error("Không lấy được thông tin người dùng:", err);
     }
@@ -44,7 +43,7 @@ const Friends = () => {
 
   const fetchFriends = async () => {
     try {
-      const res = await axios.get(address + "/api/friends/list", { withCredentials: true });
+      const res = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/friends/list", { withCredentials: true });
       setFriends(res.data.data || []);
     } catch (err) {
       console.error("Lỗi khi tải danh sách bạn bè:", err);
@@ -53,7 +52,7 @@ const Friends = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`${address}/api/user/all`, { withCredentials: true });
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/all`, { withCredentials: true });
       setUsers(res.data.users || []);
     } catch (err) {
       console.error("Lỗi khi tải danh sách người dùng:", err);
@@ -62,7 +61,7 @@ const Friends = () => {
 
   const fetchSentRequests = async () => {
     try {
-      const res = await axios.get(address + "/api/friends/sent", { withCredentials: true });
+      const res = await axios.get(import.meta.env.VITE_BACKEND_URL + "/api/friends/sent", { withCredentials: true });
       setSentRequests(res.data.data || []);
     } catch (err) {
       console.error("Lỗi khi tải lời mời đã gửi:", err);
@@ -72,7 +71,7 @@ const Friends = () => {
   const handleSendRequest = async (toUserId) => {
     try {
       const res = await axios.post(
-        address + "/api/friends/request",
+        import.meta.env.VITE_BACKEND_URL + "/api/friends/request",
         { toUserId },
         { withCredentials: true }
       );
@@ -84,42 +83,42 @@ const Friends = () => {
     }
   };
 
-const handleCancelRequest = async (toUserId) => {
-  try {
-    const res = await axios.post(
-      address + "/api/friends/cancel",
-      { toUserId },
-      { withCredentials: true }
-    );
-    toast.success(res.data.msg);
+  const handleCancelRequest = async (toUserId) => {
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/friends/cancel",
+        { toUserId },
+        { withCredentials: true }
+      );
+      toast.success(res.data.msg);
 
-     
-    setSentRequests((prev) => prev.filter((u) => u._id !== toUserId));
-  } catch (err) {
-    toast.error(err.response?.data?.msg || "Hủy lời mời thất bại");
-  }
-};
 
-const handleAccept = async (fromUserId) => {
-  try {
-    const res = await axios.post(address + "/api/friends/accept", { fromUserId }, { withCredentials: true });
-    toast.success(res.data.msg);
-    await fetchReceivedRequests();  
-    await fetchFriends();           
-  } catch (err) {
-    toast.error(err.response?.data?.msg || "Lỗi khi chấp nhận lời mời");
-  }
-};
+      setSentRequests((prev) => prev.filter((u) => u._id !== toUserId));
+    } catch (err) {
+      toast.error(err.response?.data?.msg || "Hủy lời mời thất bại");
+    }
+  };
 
-const handleDecline = async (fromUserId) => {
-  try {
-    const res = await axios.post(address + "/api/friends/decline", { fromUserId }, { withCredentials: true });
-    toast.success(res.data.msg);
-    await fetchReceivedRequests(); // cập nhật lại
-  } catch (err) {
-    toast.error(err.response?.data?.msg || "Lỗi khi từ chối lời mời");
-  }
-};
+  const handleAccept = async (fromUserId) => {
+    try {
+      const res = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/friends/accept", { fromUserId }, { withCredentials: true });
+      toast.success(res.data.msg);
+      await fetchReceivedRequests();
+      await fetchFriends();
+    } catch (err) {
+      toast.error(err.response?.data?.msg || "Lỗi khi chấp nhận lời mời");
+    }
+  };
+
+  const handleDecline = async (fromUserId) => {
+    try {
+      const res = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/friends/decline", { fromUserId }, { withCredentials: true });
+      toast.success(res.data.msg);
+      await fetchReceivedRequests(); // cập nhật lại
+    } catch (err) {
+      toast.error(err.response?.data?.msg || "Lỗi khi từ chối lời mời");
+    }
+  };
 
 
   const checkFriendStatus = (userId) => {
@@ -198,7 +197,7 @@ const handleDecline = async (fromUserId) => {
           </div>
 
           {/* Danh sách lời mời kết bạn */}
-         {receivedRequests.length > 0 ? (
+          {receivedRequests.length > 0 ? (
             receivedRequests.map((user) => (
               <li key={user._id} className="mb-3 p-3 border-bottom">
                 <div className="d-flex align-items-center justify-content-between">

@@ -13,7 +13,7 @@ const StoryUploader = ({ onStoryUploaded }) => {
     formData.append("media", file);
 
     try {
-      const res = await axios.post("http://localhost:3000/api/story", formData, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/story`, formData, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
